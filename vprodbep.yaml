@@ -30,21 +30,13 @@ spec:
                   name: app-secret
                   key: db-pass
       nodeSelector:
-        zone: us-east-1a
-        tolerations:
-          - key: "node-role.kubernetes.io/control-plane"
-            operator: "Exists"
-            effect: "NoSchedule"
+        zone: us-east-1
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
       volumes:
         - name: vpro-db-data
           awsElasticBlockStore:
             volumeID: vol-0006124b887f828c9
             fsType: ext4
-
-      initContainers:
-        - name: busybox
-          image: busybox:latest
-          command: ["rm", "-rf", "/var/lib/mysql/lost+found"]
-          volumeMounts:
-            - name: vpro-db-data
-              mountPath: /var/lib/mysql
