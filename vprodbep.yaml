@@ -6,7 +6,7 @@ metadata:
     app: vprodb
 spec:
   selector:
-    matchLabels: 
+    matchLabels:
       app: vprodb
   replicas: 1
   template:
@@ -25,23 +25,22 @@ spec:
               containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
-              valueFrom: 
+              valueFrom:
                 secretKeyRef:
                   name: app-secret
                   key: db-pass
       nodeSelector:
         zone: us-east-1a
-      Volumes:
+      volumes:
         - name: vpro-db-data
           awsElasticBlockStore:
             volumeID: vol-0006124b887f828c9
-            fstype: ext4
+            fsType: ext4
 
       initContainers:
         - name: busybox
           image: busybox:latest
-          args: ["rm", "-rf", "/var/lib/mysql/lost=found"]
+          command: ["rm", "-rf", "/var/lib/mysql/lost+found"]
           volumeMounts:
             - name: vpro-db-data
-              mountPath: /var/lib/mysql    
-                       
+              mountPath: /var/lib/mysql
